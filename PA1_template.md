@@ -6,7 +6,8 @@ The data used in this exercise is the Activity monitoring data. The data is save
 
 The data saved in local disk is loaded and read into the dataframe acivity.df
 Also the required packages are loaded
-```{r, message=FALSE, warning=FALSE}
+
+```r
 library("ggplot2",lib.loc="D:/ReadPlease/Rpackage/")
 library("ggthemes",lib.loc="D:/ReadPlease/Rpackage/")
 library("scales",lib.loc="D:/ReadPlease/Rpackage/")
@@ -20,7 +21,8 @@ activity.df <- read.csv("D:/ReadPlease/CourseraDataScience/Reproducibleresearch/
 
 The number of steps taken in a day is measured in intervals of 5. These need to be aggregated for each day and stored in dataframe activity.sum
 Below code aggregates the steps taken and plot a graph. The Mean and Median is also plotted as a horizontal line 
-```{r}
+
+```r
 activity.sum <- aggregate(steps ~ date, data=activity.df, FUN=sum)
 
 ggplot(activity.sum, aes(x=date, y=steps)) +
@@ -48,13 +50,16 @@ ggplot(activity.sum, aes(x=date, y=steps)) +
     x = 10, y = 20000), color = "red", size = 4) +
     geom_text(aes(label = paste("Overall Median =", median(steps, na.rm = TRUE) ),
     x = 10, y = 20800), color = "blue", size = 4) 
-``` 
+```
+
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ##  Average daily activity pattern
 
 The number of steps taken in a day is measured in intervals of 5. The Average steps taken during each interval (averaged across all days)need to be calculated. Also the interval which has the highest average steps taken to be calculated and added to the plot
 
-```{r}
+
+```r
 activity.sum <- aggregate(steps ~ interval, data=activity.df, FUN=mean)
 
 max.int.var <- activity.sum[which.max(activity.sum$steps),]
@@ -68,30 +73,35 @@ ggplot(activity.sum, aes(x=interval, y=steps)) +
     x = 1500, y = 180), color = "blue", size = 4) 
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
 ## Imputing missing values
 
 Calculate the total number of missing values in the dataset 
-```{r}
+
+```r
 totalna <- sum(is.na(activity.df$steps))
 ```
 
-Total number of missing values in the dataset is `r totalna`.
+Total number of missing values in the dataset is 2304.
 
-Since we have `r totalna` missing values in the dataset, we need to fill in the missing values. We need to calculate the mean value below
+Since we have 2304 missing values in the dataset, we need to fill in the missing values. We need to calculate the mean value below
 
-```{r}
+
+```r
 totalmean <- mean(activity.df$steps, na.rm=TRUE)
 ```
 
-The mean value is `r totalmean`. We can fill in the mean value of `r totalmean` to the missing values. This will Create a new dataset that is equal to the original dataset but with the missing data filled in
-```{r}
+The mean value is 37.3825996. We can fill in the mean value of 37.3825996 to the missing values. This will Create a new dataset that is equal to the original dataset but with the missing data filled in
+
+```r
 activity.df$steps[is.na(activity.df$steps)] <- totalmean
 ```
 
 The number of steps taken in a day is measured in intervals of 5. These need to be aggregated for each day and stored in dataframe activity.sum
 Below code aggregates the steps taken and plot a graph. The Mean and Median is also plotted as a horizontal line
-```{r}
 
+```r
 activity.sum <- aggregate(steps ~ date, data=activity.df, FUN=sum)
 
 ggplot(activity.sum, aes(x=date, y=steps)) +
@@ -121,20 +131,24 @@ ggplot(activity.sum, aes(x=date, y=steps)) +
     x = 10, y = 20800), color = "blue", size = 4) 
 ```
 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+
 We can see that the new plot has values for the dates which were missing in plot1
 Also the mean and median has not changed because we introduced the mean value to the missing values. 
 
 ## Differences in activity patterns between weekdays and weekends 
 
 Introduce a new column in the dataframe which has a factor to denote the row as weekday or weekend
-```{r}
+
+```r
 weekdays1 <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
 
 activity.df$day <- factor((weekdays(as.Date(activity.df$date)) %in% weekdays1), levels=c(FALSE, TRUE), labels=c('weekend', 'weekday'))
 ```
 
 Aggregagte the for each factor(weekday or weekend) and interval value and plot the values for weekday and weekend
-```{r}
+
+```r
 activity.sum <- ddply(activity.df, .(day, interval), summarise, average = mean(steps,na.rm=TRUE))
 
 activity.sum$int <- as.POSIXct(strptime(sprintf("%04d", activity.sum$interval), "%H%M")) 
@@ -150,3 +164,5 @@ ggplot(activity.sum, aes(x=int, y=average, group=day, color=day)) +
     ylab("Average steps") + 
     xlab("30 minute Time Intervals in a day")
 ```
+
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
