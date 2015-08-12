@@ -12,7 +12,7 @@ library("ggthemes",lib.loc="D:/ReadPlease/Rpackage/")
 library("scales",lib.loc="D:/ReadPlease/Rpackage/")
 library("plyr",lib.loc="D:/ReadPlease/Rpackage/")
 
-setwd("D:/ReadPlease/CourseraDataScience/Reproducibleresearch/RRPA1")
+setwd("D:/ReadPlease/CourseraDataScience/Reproducibleresearch/RRPA1/RepData_PeerAssessment1")
 activity.df <- read.csv("D:/ReadPlease/CourseraDataScience/Reproducibleresearch/activity.csv")
 ```
 
